@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "c1afa3c479253782f0fef6d476c578f3",
-    "content-hash": "c4086a28bd7366ba49ce221d5a03f20d",
+    "hash": "6aca667c506e357ba49f62cbeb32415a",
+    "content-hash": "3fcba2b42fc2048986b228760cc1b5f9",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -1169,6 +1169,59 @@
                 "psr-3"
             ],
             "time": "2016-10-10 12:19:37"
+        },
+        {
+            "name": "rezzza/flickr",
+            "version": "v1.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/rezzza/flickr.git",
+                "reference": "97bf6ce57614ac793a6aaecf887a0da1dcc9c281"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/rezzza/flickr/zipball/97bf6ce57614ac793a6aaecf887a0da1dcc9c281",
+                "reference": "97bf6ce57614ac793a6aaecf887a0da1dcc9c281",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.2"
+            },
+            "require-dev": {
+                "guzzle/http": "3.*",
+                "phpunit/phpunit": "3.7.32"
+            },
+            "suggest": {
+                "guzzle/guzzle": "HTTP wrapper",
+                "guzzle/http": "Guzzle Adapter for http requests"
+            },
+            "type": "standalone",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Rezzza\\Flickr": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Community contributors",
+                    "homepage": "https://github.com/rezzza/flickr/contributors"
+                }
+            ],
+            "description": "Flickr API Wrapper",
+            "homepage": "https://github.com/rezzza/flickr",
+            "keywords": [
+                "flickr"
+            ],
+            "time": "2014-02-26 09:18:38"
         },
         {
             "name": "sensio/distribution-bundle",
