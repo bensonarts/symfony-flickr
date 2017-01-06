@@ -47,7 +47,7 @@ class Image
      * @var string
      *
      * @Assert\NotBlank()
-     * @Assert\Url()
+     * @Assert\Image()
      * @ORM\Column(name="url", type="string", length=255, nullable=false)
      * @JMS\Expose
      */
@@ -58,9 +58,7 @@ class Image
      *
      * @var string
      *
-     * @Assert\NotBlank()
-     * @Assert\Url()
-     * @ORM\Column(name="thumbnail_url", type="string", length=255, nullable=false)
+     * @ORM\Column(name="thumbnail_url", type="string", length=255, nullable=true)
      * @JMS\Expose
      */
     private $thumbnailUrl;

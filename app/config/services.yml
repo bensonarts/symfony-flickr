@@ -4,6 +4,6 @@ parameters:
 #    parameter_name: value
 
 services:
-#    service_name:
-#        class: AppBundle\Directory\ClassName
-#        arguments: ["@another_service_name", "plain_value", "%parameter_name%"]
+    flickr.manager:
+        class: AppBundle\Service\FlickrManager
+        arguments: [rezzza_flickr.client, '%flickr_api_key%', '%flickr_api_secret%']

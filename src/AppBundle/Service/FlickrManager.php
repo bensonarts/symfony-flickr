@@ -1,5 +1,7 @@
 <?php
 
+namespace AppBundle\Service;
+
 /**
  *
  */
@@ -50,8 +52,6 @@ class FlickrManager
     public function upload($file, $title)
     {
         $this->flickrClient->getMetadata()->setOauthAccess('access token', 'access token secret');
-
-        #$factory  = new Rezzza\Flickr\ApiFactory($metadata, new Rezzza\Flickr\Http\GuzzleAdapter());
 
         $this->flickrClient->call('flickr.test.login');
         $this->flickrClient->call('flickr.photos.getInfo', [

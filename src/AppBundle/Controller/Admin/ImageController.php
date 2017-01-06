@@ -41,24 +41,27 @@ class ImageController extends Controller
      *
      * @Route("/admin/category/{id}/image/create", name="admin_image_create")
      */
-    public function createAction(Request $request)
+    public function createAction(Request $request, Category $category)
     {
-        $category = new Category();
-        $form = $this->createForm(CategoryType::class, $category);
+        $image = new Image();
+        $this->get('flickr.manager');
+        $form = $this->createForm(ImageType::class, $image);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $category = $form->getData();
+            $image = $form->getData();
+
             $em = $this->getDoctrine()->getManager();
-            $em->persist($category);
+            $em->persist($image);
             $em->flush();
 
-            return $this->redirectToRoute('admin_category_index');
+            return $this->redirectToRoute('admin_image_index', [ 'id' => $category->getId() ]);
         }
 
-        return $this->render('default/admin/category/create.html.twig', [
+        return $this->render('default/admin/image/create.html.twig', [
             'form' => $form->createView(),
+            'category' => $category
         ]);
     }
 
