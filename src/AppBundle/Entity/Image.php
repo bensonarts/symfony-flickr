@@ -15,9 +15,21 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Image
 {
-    use Traits\AutoIncrementInteger;
     use Traits\Enableable;
     use Traits\Timestampable;
+
+    /**
+     * System object identifier
+     *
+     * @var integer
+     *
+     * @ORM\Id
+     * @ORM\Column(name="id", type="integer", options={"unsigned": true})
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @JMS\Expose
+     * @JMS\Groups({"detail"})
+     */
+    protected $id;
 
     /**
      * Title of image
@@ -27,6 +39,7 @@ class Image
      * @Assert\NotBlank()
      * @ORM\Column(name="title", type="string", length=100, nullable=false)
      * @JMS\Expose
+     * @JMS\Groups({"detail"})
      */
     private $title;
 
@@ -38,6 +51,7 @@ class Image
      * @Assert\NotBlank()
      * @ORM\Column(name="description", type="string", length=255, nullable=false)
      * @JMS\Expose
+     * @JMS\Groups({"detail"})
      */
     private $description;
 
@@ -50,6 +64,7 @@ class Image
      * @Assert\Image()
      * @ORM\Column(name="url", type="string", length=255, nullable=false)
      * @JMS\Expose
+     * @JMS\Groups({"detail"})
      */
     private $url;
 
@@ -60,6 +75,7 @@ class Image
      *
      * @ORM\Column(name="thumbnail_url", type="string", length=255, nullable=true)
      * @JMS\Expose
+     * @JMS\Groups({"detail"})
      */
     private $thumbnailUrl;
 
@@ -190,6 +206,16 @@ class Image
     public function getCategory()
     {
         return $this->category;
+    }
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
     }
 
 }

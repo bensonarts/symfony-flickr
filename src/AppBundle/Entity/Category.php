@@ -15,9 +15,21 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Category
 {
-    use Traits\AutoIncrementInteger;
     use Traits\Enableable;
     use Traits\Timestampable;
+
+    /**
+     * System object identifier
+     *
+     * @var integer
+     *
+     * @ORM\Id
+     * @ORM\Column(name="id", type="integer", options={"unsigned": true})
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @JMS\Expose
+     * @JMS\Groups({"list"})
+     */
+    protected $id;
 
     /**
      * Name of category
@@ -27,6 +39,7 @@ class Category
      * @Assert\NotBlank()
      * @ORM\Column(name="name", type="string", length=100, nullable=false)
      * @JMS\Expose
+     * @JMS\Groups({"list"})
      */
     private $name;
 
@@ -34,6 +47,8 @@ class Category
      * @var Image[]
      *
      * @ORM\OneToMany(targetEntity="Image", mappedBy="category")
+     * @JMS\Expose
+     * @JMS\Groups({"detail"})
      */
     private $images;
 
@@ -98,6 +113,16 @@ class Category
     public function removeImage(\AppBundle\Entity\Image $image)
     {
         $this->images->removeElement($image);
+    }
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
     }
 
 }
