@@ -44,13 +44,21 @@ class ImageController extends Controller
     public function createAction(Request $request, Category $category)
     {
         $image = new Image();
-        $this->get('flickr.manager');
         $form = $this->createForm(ImageType::class, $image);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $image = $form->getData();
+
+            $flickrManager = $this->get('flickr.manager');
+
+            try {
+                $result = $flickrManager->upload($image->getUrl(), $image->getTitle());
+                var_dump($result);exit;
+            } catch (\Exception $e) {
+                throw $e;
+            }
 
             $em = $this->getDoctrine()->getManager();
             $em->persist($image);

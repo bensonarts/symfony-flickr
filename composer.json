@@ -30,7 +30,6 @@
         "incenteev/composer-parameter-handler": "^2.0",
         "friendsofsymfony/user-bundle": "dev-master",
         "rezzza/flickr": "^1.1",
-        "rezzza/flickr-bundle": "^1.0",
         "friendsofsymfony/rest-bundle": "^2.1",
         "jms/serializer-bundle": "^1.1"
     },

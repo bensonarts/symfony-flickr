@@ -2,18 +2,15 @@
 
 namespace AppBundle\Service;
 
+use Rezzza\Flickr\ApiFactory;
+use Rezzza\Flickr\Metadata;
+use Rezzza\Flickr\Http\GuzzleAdapter;
+
 /**
  *
  */
 class FlickrManager
 {
-    /**
-     * Flickr Client
-     *
-     * @var $flickrClient
-     */
-    private $flickrClient;
-
     /**
      * Flickr API Key
      *
@@ -31,13 +28,11 @@ class FlickrManager
     /**
      * Class constructor
      *
-     * @param $flickrClient
      * @param string $apiKey
      * @param string $apiSecret
      */
-    public function __construct($flickrClient, $apiKey, $apiSecret)
+    public function __construct($apiKey, $apiSecret)
     {
-        $this->flickrClient = $flickrClient;
         $this->apiKey = $apiKey;
         $this->apiSecret = $apiSecret;
     }
@@ -51,14 +46,19 @@ class FlickrManager
      */
     public function upload($file, $title)
     {
-        $this->flickrClient->getMetadata()->setOauthAccess('access token', 'access token secret');
+        $metadata = new Metadata($this->apiKey, $this->apiSecret);
+        $metadata->setOauthAccess('access token', 'access token secret');
 
-        $this->flickrClient->call('flickr.test.login');
-        $this->flickrClient->call('flickr.photos.getInfo', [
+        $factory  = new ApiFactory($metadata, new GuzzleAdapter());
+
+        #$xml = $factory->call('flickr.test.login');
+        /*$xml = $factory->call('flickr.photos.getInfo', array(
             'photo_id' => 1337,
-        ]);
+        ));*/
 
-        $this->flickrClient->upload($file, $title);
+        $response = $factory->upload($file, $title);
+
+        var_dump($response);exit;
     }
 
 
