@@ -1,0 +1,4 @@
+services:
+    flickr.manager:
+        class: AppBundle\Service\FlickrManager
+        arguments: [rezzza_flickr.client, '%flickr_api_key%', '%flickr_api_secret%']

@@ -1,0 +1,4 @@
+api_gallery:
+    type: rest
+    resource: AppBundle\Controller\API\CategoryController
+    name_prefix: api_gallery_
