@@ -1,0 +1,10 @@
+{% extends 'admin_base.html.twig' %}
+
+{% block body %}
+    <h2>Delete Category</h2>
+    <p>Name: {{ category.name }}</p>
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+    {{ form_end(form) }}
+    <a href="{{ path('admin_category_index') }}">Back</a>
+{% endblock %}

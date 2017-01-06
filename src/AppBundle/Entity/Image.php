@@ -4,6 +4,7 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as JMS;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Category
@@ -23,6 +24,7 @@ class Image
      *
      * @var string
      *
+     * @Assert\NotBlank()
      * @ORM\Column(name="title", type="string", length=100, nullable=false)
      * @JMS\Expose
      */
@@ -33,6 +35,7 @@ class Image
      *
      * @var string
      *
+     * @Assert\NotBlank()
      * @ORM\Column(name="description", type="string", length=255, nullable=false)
      * @JMS\Expose
      */
@@ -43,10 +46,24 @@ class Image
      *
      * @var string
      *
+     * @Assert\NotBlank()
+     * @Assert\Url()
      * @ORM\Column(name="url", type="string", length=255, nullable=false)
      * @JMS\Expose
      */
     private $url;
+
+    /**
+     * Thumbnail URL of image
+     *
+     * @var string
+     *
+     * @Assert\NotBlank()
+     * @Assert\Url()
+     * @ORM\Column(name="thumbnail_url", type="string", length=255, nullable=false)
+     * @JMS\Expose
+     */
+    private $thumbnailUrl;
 
     /**
      * @var \AppBundle\Entity\Category
@@ -54,7 +71,13 @@ class Image
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Category", inversedBy="images")
      * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
      */
-    private $application;
+    private $category;
+
+    public function __construct()
+    {
+        $this->createdAt = new \DateTime();
+        $this->enabled = true;
+    }
 
     /**
      * Set title
@@ -123,6 +146,29 @@ class Image
     public function getUrl()
     {
         return $this->url;
+    }
+
+    /**
+     * Set thumbnailUrl
+     *
+     * @param string $url
+     * @return Image
+     */
+    public function setThumbnailUrl($thumbnailUrl)
+    {
+        $this->thumbnailUrl = $thumbnailUrl;
+
+        return $this;
+    }
+
+    /**
+     * Get thumbnailUrl
+     *
+     * @return string
+     */
+    public function getThumbnailUrl()
+    {
+        return $this->thumbnailUrl;
     }
 
     /**

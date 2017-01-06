@@ -1,0 +1,26 @@
+{% extends 'admin_base.html.twig' %}
+
+{% block body %}
+    <h2>Images for {{ category.name }}</h2>
+    <a href="{{ path('admin_image_create', { 'id' : category.id }) }}" class="btn btn-default">Create</a>
+    <table class="table table-striped">
+        <thead>
+            <th width="5%">#</th>
+            <th width="100">Thumbnail</th>
+            <th>Title</th>
+            <th width="10%"></th>
+        </thead>
+        <tbody>
+    {% for image in category.images %}
+            <tr>
+                <td>{{ image.id }}</td>
+                <td><a href="{{ path('admin_image_edit', { 'id' : image.id } ) }}" class="thumbnail"><img src="{{ image.thumbnailUrl }}" width="100" /></a></td>
+                <td><a href="{{ path('admin_image_edit', { 'id' : image.id } ) }}">{{ image.title }}</a></td>
+                <td>
+                    <a href="{{ path('admin_image_delete', { 'id' : image.id } ) }}" class="btn btn-danger">Delete</a>
+                </td>
+            </tr>
+    {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

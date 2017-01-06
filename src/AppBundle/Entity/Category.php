@@ -4,6 +4,7 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as JMS;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Category
@@ -23,6 +24,7 @@ class Category
      *
      * @var string
      *
+     * @Assert\NotBlank()
      * @ORM\Column(name="name", type="string", length=100, nullable=false)
      * @JMS\Expose
      */
@@ -34,6 +36,13 @@ class Category
      * @ORM\OneToMany(targetEntity="Image", mappedBy="category")
      */
     private $images;
+
+    public function __construct()
+    {
+        $this->createdAt = new \DateTime();
+        $this->images = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->enabled = true;
+    }
 
     /**
      * Set name
@@ -66,14 +75,6 @@ class Category
     public function getImages()
     {
         return $this->images;
-    }
-
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->images = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
