@@ -7,7 +7,8 @@
 
     var $title = $('#category-title'),
         $imageList = $('#image-list'),
-        $categoryList = $('#category-list');
+        $categoryList = $('#category-list'),
+        $imageDisplay = $('#image-display');
 
     /**
      * Start up application. Load categories from API.
@@ -110,7 +111,23 @@
         });
 
         if (currentImage) {
-            // todo display image
+            $imageList.hide();
+            $imageDisplay.show().html('<div class="panel panel-default">' +
+                    '<div class="panel-body">' +
+                        '<div class="row">' +
+                            '<div class="col-md-8">' +
+                                '<img src="' + currentImage.url + '" class="img-responsive" alt="' + currentImage.title + '">' +
+                            '</div>' +
+                            '<div class="col-md-4">' +
+                                '<button type="button" id="back" class="btn btn-default pull-right" aria-label="Back">' +
+                                    '<span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>' +
+                                '</button>' +
+                                '<h3>' + currentImage.title + '</h3>' +
+                                '<p>' + currentImage.description + '</p>' +
+                            '</div>' +
+                        '</div>' +
+                    '</div>' +
+                '</div>');
         }
     };
 
@@ -120,10 +137,18 @@
     var showImageLoader = function() {
         $imageList.html('<div class="progress">' +
             '<div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">' +
-                '<span class="sr-only">45% Complete</span>' +
+                '<span class="sr-only">100% Complete</span>' +
                 '</div>' +
             '</div>');
     };
+
+    /**
+     * Hide enlarged image display.
+     */
+    var hideImageDisplay = function() {
+        $imageDisplay.hide().html('');
+        $imageList.show();
+    }
 
     /**
      * Clear the image list view.
@@ -148,6 +173,10 @@
     $imageList.on('click', 'a.thumbnail', function() {
         var id = $(this).attr('data-attr');
         loadImage(id);
+    });
+
+    $imageDisplay.on('click', 'button#back', function() {
+        hideImageDisplay();
     });
 
     init();
