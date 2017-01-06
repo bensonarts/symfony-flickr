@@ -10,6 +10,7 @@ use AppBundle\Form\DeleteType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class ImageController extends Controller
 {
@@ -52,13 +53,26 @@ class ImageController extends Controller
             $image = $form->getData();
 
             $flickrManager = $this->get('flickr.manager');
+            $callback = $this->generateUrl('admin_image_create',
+                ['id' => $category->getId()], UrlGeneratorInterface::ABSOLUTE_URL);
 
-            try {
-                $result = $flickrManager->upload($image->getUrl(), $image->getTitle());
-                var_dump($result);exit;
-            } catch (\Exception $e) {
-                throw $e;
+            $result = $flickrManager->upload($image->getUrl(), $image->getTitle(), $callback);
+
+            $flickrUrl = $result->sizes->urls->url;
+            // Get image sizes collection.
+            foreach ($result->sizes->size as $size) {
+                switch ($size['label']) {
+                    case 'Thumbnail':
+                        $image->setThumbnailUrl($size['source']);
+                        break;
+                    case 'Medium':
+                        $image->setUrl($size['source']);
+                        break;
+                    default:
+                        break;
+                }
             }
+            #print('<pre>' . print_r($result, true) . '</pre>');exit;
 
             $em = $this->getDoctrine()->getManager();
             $em->persist($image);

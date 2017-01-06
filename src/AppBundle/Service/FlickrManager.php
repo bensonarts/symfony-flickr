@@ -25,6 +25,8 @@ class FlickrManager
      */
     private $apiSecret;
 
+    private $metadata;
+
     /**
      * Class constructor
      *
@@ -35,6 +37,8 @@ class FlickrManager
     {
         $this->apiKey = $apiKey;
         $this->apiSecret = $apiSecret;
+        $this->metadata = new Metadata($this->apiKey, $this->apiSecret);
+        $this->authenticate();
     }
 
     /**
@@ -42,23 +46,48 @@ class FlickrManager
      *
      * @param string $file Location of file to upload.
      * @param string $title Title of photo
+     * @param string $callback
      * @return void
      */
-    public function upload($file, $title)
+    public function upload($file, $title, $callback)
     {
-        $metadata = new Metadata($this->apiKey, $this->apiSecret);
-        $metadata->setOauthAccess('access token', 'access token secret');
+        /*
+        $flickr = new Flickr($this->apiKey, $this->apiSecret, null);
+        if (!$flickr->authenticate('write')) {
+            // some problem!
+        }
 
-        $factory  = new ApiFactory($metadata, new GuzzleAdapter());
+        $response = $flickr->upload([
+            'title' => $title,
+            'photo' => '@'. realpath($file),
+        ]);
+
+        var_dump($response);exit;
+        */
+
+
+        $factory  = new ApiFactory($this->metadata, new GuzzleAdapter());
 
         #$xml = $factory->call('flickr.test.login');
-        /*$xml = $factory->call('flickr.photos.getInfo', array(
-            'photo_id' => 1337,
-        ));*/
+        #$response = $factory->call('flickr.photos.getInfo', [
+        #    'photo_id' => 32112122496,
+        #]);
 
         $response = $factory->upload($file, $title);
 
-        var_dump($response);exit;
+        if ($response && isset($response['stat']) && $response['stat'] == 'ok') {
+            return $factory->call('flickr.photos.getSizes', [
+                'photo_id' => $response->photoid,
+            ]);
+        }
+
+        throw \Exception('Error uploading to Flickr');
+    }
+
+    protected function authenticate()
+    {
+        // TODO
+        $this->metadata->setOauthAccess('72157675114822233-daeff6d72bbd5273', 'c13adc30b5163ac0');
     }
 
 
