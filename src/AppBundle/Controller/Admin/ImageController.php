@@ -113,7 +113,7 @@ class ImageController extends Controller
             return $this->redirectToRoute('admin_category_index');
         }
 
-        return $this->render('default/admin/category/create.html.twig', [
+        return $this->render('default/admin/image/edit.html.twig', [
             'form' => $form->createView(),
             'category' => $category
         ]);
@@ -125,11 +125,11 @@ class ImageController extends Controller
      * @param Request $request
      * @param Response
      *
-     * @Route("/admin/image/delete/{id}", name="admin_image_delete")
+     * @Route("/admin/image/{id}", name="admin_image_delete")
      */
-    public function deleteAction(Request $request, Category $category)
+    public function deleteAction(Request $request, Image $image)
     {
-        if (!$category) {
+        if (!$image) {
             throw $this->createNotFoundException();
         }
 
@@ -138,12 +138,16 @@ class ImageController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            //
+            $em = $this->getDoctrine()->getManager();
+            $em->remove($image);
+            $em->flush();
+
+            return $this->redirectToRoute('admin_image_index', [ 'id' => $category->getId() ]);
         }
 
-        return $this->render('default/admin/category/delete.html.twig', [
+        return $this->render('default/admin/image/delete.html.twig', [
             'form' => $form->createView(),
-            'category' => $category
+            'image' => $image
         ]);
     }
 }

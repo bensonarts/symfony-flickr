@@ -1,0 +1,11 @@
+{% form_theme form 'bootstrap_3_layout.html.twig' %}
+{% extends 'admin_base.html.twig' %}
+
+{% block body %}
+    <h2>Delete Image</h2>
+    <p><img src="{{ image.thumbnailUrl }}" /></p>
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+    {{ form_end(form) }}
+    <a href="{{ path('admin_image_index', { 'id' : image.category.id }) }}">Back</a>
+{% endblock %}
