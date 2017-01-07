@@ -13,6 +13,8 @@ class DefaultController extends Controller
      */
     public function indexAction(Request $request)
     {
-        return $this->render('default/index.html.twig');
+        return $this->render('default/index.html.twig', [
+            'api_endpoint' => $this->generateUrl('api_gallery_get_categories')
+        ]);
     }
 }

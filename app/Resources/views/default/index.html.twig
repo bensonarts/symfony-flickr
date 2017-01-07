@@ -21,5 +21,8 @@
 {% endblock %}
 
 {% block javascripts %}
+    <script type="text/javascript">
+        window.apiEndpoint = "{{ api_endpoint }}";
+    </script>
     <script type="text/javascript" src="/js/gallery.js"></script>
 {% endblock %}

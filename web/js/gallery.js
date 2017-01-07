@@ -1,5 +1,5 @@
 (function() {
-    var endpoint = '/app_dev.php/api/',
+    var endpoint = window.apiEndpoint,
         currentCategory,
         currentImage,
         categoriesArr,
@@ -14,7 +14,7 @@
      * Start up application. Load categories from API.
      */
     var init = function() {
-        $.get(endpoint + 'categories', function(data) {
+        $.get(endpoint, function(data) {
             buildCategories(data);
         });
     };
@@ -57,7 +57,7 @@
      */
     var getImages = function() {
         showImageLoader();
-        $.get(endpoint + 'categories/' + currentCategory.id, function(data) {
+        $.get(endpoint + '/' + currentCategory.id, function(data) {
             if (data.images && data.images.length) {
                 imagesArr = data.images;
                 clearImageList();
