@@ -117,7 +117,15 @@ class CategoryController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            //
+            $em = $this->getDoctrine()->getManager();
+            $images = $category->getImages();
+            foreach ($images as $image) {
+                $em->remove($image);
+            }
+            $em->remove($category);
+            $em->flush();
+
+            return $this->redirectToRoute('admin_category_index');
         }
 
         return $this->render('default/admin/category/delete.html.twig', [
