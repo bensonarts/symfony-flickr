@@ -11,16 +11,16 @@
             <th width="10%"></th>
         </thead>
         <tbody>
-    {% for image in category.images %}
+            {% for image in category.images %}
             <tr>
                 <td>{{ image.id }}</td>
-                <td><a href="{{ path('admin_image_edit', { 'id' : image.id } ) }}" class="thumbnail"><img src="{{ image.thumbnailUrl }}" width="100" /></a></td>
-                <td><a href="{{ path('admin_image_edit', { 'id' : image.id } ) }}">{{ image.title }}</a></td>
+                <td><img src="{{ image.thumbnailUrl }}" width="100" /></td>
+                <td>{{ image.title }}</td>
                 <td>
                     <a href="{{ path('admin_image_delete', { 'id' : image.id } ) }}" class="btn btn-danger">Delete</a>
                 </td>
             </tr>
-    {% endfor %}
+            {% endfor %}
         </tbody>
     </table>
 {% endblock %}

@@ -87,39 +87,6 @@ class ImageController extends Controller
     }
 
     /**
-     * Edit image
-     *
-     * @param Request $request
-     * @param Response
-     *
-     * @Route("/admin/image/edit/{id}", name="admin_image_edit")
-     */
-    public function editAction(Request $request, Category $category)
-    {
-        if (!$category) {
-            throw $this->createNotFoundException();
-        }
-
-        $form = $this->createForm(CategoryType::class, $category);
-
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $category = $form->getData();
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($category);
-            $em->flush();
-
-            return $this->redirectToRoute('admin_category_index');
-        }
-
-        return $this->render('default/admin/image/edit.html.twig', [
-            'form' => $form->createView(),
-            'category' => $category
-        ]);
-    }
-
-    /**
      * Delete category
      *
      * @param Request $request
