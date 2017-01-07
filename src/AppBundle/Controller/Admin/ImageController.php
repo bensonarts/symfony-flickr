@@ -56,11 +56,10 @@ class ImageController extends Controller
             $callback = $this->generateUrl('admin_image_create',
                 ['id' => $category->getId()], UrlGeneratorInterface::ABSOLUTE_URL);
 
-            $result = $flickrManager->upload($image->getUrl(), $image->getTitle(), $callback);
-
-            $flickrUrl = $result->sizes->urls->url;
+            $flickrImageId = $flickrManager->upload($image->getUrl(), $image->getTitle(), $callback);
+            $flickrImageSizes = $flickrManager->getImageSizes($flickrImageId);
             // Get image sizes collection.
-            foreach ($result->sizes->size as $size) {
+            foreach ($flickrImageSizes as $size) {
                 switch ($size['label']) {
                     case 'Thumbnail':
                         $image->setThumbnailUrl($size['source']);

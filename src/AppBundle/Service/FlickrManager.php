@@ -27,6 +27,8 @@ class FlickrManager
 
     private $metadata;
 
+    private $factory;
+
     /**
      * Class constructor
      *
@@ -47,7 +49,8 @@ class FlickrManager
      * @param string $file Location of file to upload.
      * @param string $title Title of photo
      * @param string $callback
-     * @return void
+     * @return int Flickr Image ID
+     * @throws Exception
      */
     public function upload($file, $title, $callback)
     {
@@ -66,29 +69,53 @@ class FlickrManager
         */
 
 
-        $factory  = new ApiFactory($this->metadata, new GuzzleAdapter());
+        $response = $this->factory->upload($file, $title);
 
-        #$xml = $factory->call('flickr.test.login');
-        #$response = $factory->call('flickr.photos.getInfo', [
-        #    'photo_id' => 32112122496,
-        #]);
-
-        $response = $factory->upload($file, $title);
-
-        if ($response && isset($response['stat']) && $response['stat'] == 'ok') {
-            return $factory->call('flickr.photos.getSizes', [
-                'photo_id' => $response->photoid,
-            ]);
+        if (!$this->isResponseSuccessful($response)) {
+            throw \Exception('Error uploading to Flickr');
         }
 
-        throw \Exception('Error uploading to Flickr');
+        return $response->photoid;
     }
 
+    /**
+     * Get image sizes
+     *
+     * @param int $imageId
+     * @return array
+     * @throws Exception
+     */
+    public function getImageSizes($imageId) {
+        $response = $this->factory->call('flickr.photos.getSizes', [
+            'photo_id' => $imageId,
+        ]);
+
+        if (!$this->isResponseSuccessful($response)) {
+            throw \Exception('Error uploading to Flickr');
+        }
+
+        return $response->sizes->size;
+    }
+
+    /**
+     * Get OAuth access token
+     */
     protected function authenticate()
     {
         // TODO
         $this->metadata->setOauthAccess('72157675114822233-daeff6d72bbd5273', 'c13adc30b5163ac0');
+        $this->factory = new ApiFactory($this->metadata, new GuzzleAdapter());
     }
 
+    /**
+     * Validate response for success
+     *
+     * @param array $response
+     * @return boolean
+     */
+    protected function isResponseSuccessful($response)
+    {
+        return $response && isset($response['stat']) && $response['stat'] == 'ok';
+    }
 
 }

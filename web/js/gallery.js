@@ -49,7 +49,7 @@
      * @return string
      */
     var createImageLink = function(image) {
-        return '<a class="thumbnail" href="#" data-attr="' + image.id + '"><img src="' + image.thumbnail_url + '" alt="' + image.title + '"></a>';
+        return '<div class="col-xs-3 col-md-3"><a class="thumbnail" href="#" data-attr="' + image.id + '"><img src="' + image.thumbnail_url + '" alt="' + image.title + '"></a></div>';
     };
 
     /**
