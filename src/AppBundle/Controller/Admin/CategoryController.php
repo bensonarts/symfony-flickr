@@ -91,7 +91,7 @@ class CategoryController extends Controller
             return $this->redirectToRoute('admin_category_index');
         }
 
-        return $this->render('default/admin/category/create.html.twig', [
+        return $this->render('default/admin/category/edit.html.twig', [
             'form' => $form->createView(),
             'category' => $category
         ]);
