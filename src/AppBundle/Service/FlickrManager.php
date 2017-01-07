@@ -25,8 +25,18 @@ class FlickrManager
      */
     private $apiSecret;
 
+    /**
+     * Rezzza\Flickr\Metadata
+     *
+     * @var $metadata;
+     */
     private $metadata;
 
+    /**
+     * Rezzza\Flickr\ApiFactory
+     *
+     * @var $factory
+     */
     private $factory;
 
     /**
@@ -40,7 +50,6 @@ class FlickrManager
         $this->apiKey = $apiKey;
         $this->apiSecret = $apiSecret;
         $this->metadata = new Metadata($this->apiKey, $this->apiSecret);
-        $this->authenticate();
     }
 
     /**
@@ -48,31 +57,15 @@ class FlickrManager
      *
      * @param string $file Location of file to upload.
      * @param string $title Title of photo
-     * @param string $callback
      * @return int Flickr Image ID
      * @throws Exception
      */
-    public function upload($file, $title, $callback)
+    public function upload($file, $title)
     {
-        /*
-        $flickr = new Flickr($this->apiKey, $this->apiSecret, null);
-        if (!$flickr->authenticate('write')) {
-            // some problem!
-        }
-
-        $response = $flickr->upload([
-            'title' => $title,
-            'photo' => '@'. realpath($file),
-        ]);
-
-        var_dump($response);exit;
-        */
-
-
         $response = $this->factory->upload($file, $title);
 
         if (!$this->isResponseSuccessful($response)) {
-            throw \Exception('Error uploading to Flickr');
+            throw new \Exception('Error uploading to Flickr');
         }
 
         return $response->photoid;
@@ -91,7 +84,7 @@ class FlickrManager
         ]);
 
         if (!$this->isResponseSuccessful($response)) {
-            throw \Exception('Error uploading to Flickr');
+            throw new \Exception('Error getting image sizes');
         }
 
         return $response->sizes->size;
@@ -99,11 +92,19 @@ class FlickrManager
 
     /**
      * Get OAuth access token
+     *
+     * @param string $callback
      */
-    protected function authenticate()
+    public function authenticate($callback)
     {
-        // TODO
-        $this->metadata->setOauthAccess('72157675114822233-daeff6d72bbd5273', 'c13adc30b5163ac0');
+        $flickr = new Flickr($this->apiKey, $this->apiSecret, $callback);
+        if (!$flickr->authenticate('write')) {
+            throw new \Exception('Unable to authenticate');
+        }
+        $accessToken = $flickr->getOauthData(Flickr::OAUTH_ACCESS_TOKEN);
+        $accessTokenSecret = $flickr->getOauthData(Flickr::OAUTH_ACCESS_TOKEN_SECRET);
+
+        $this->metadata->setOauthAccess($accessToken, $accessTokenSecret);
         $this->factory = new ApiFactory($this->metadata, new GuzzleAdapter());
     }
 

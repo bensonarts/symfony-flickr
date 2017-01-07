@@ -199,7 +199,6 @@ class Flickr
      */
     public function authenticate($permissions = 'read')
     {
-        error_log(__FUNCTION__);
         $ok = false;
         // First of all, check to see if we're part way through the authentication process
         if ($this->getOauthData(self::IS_AUTHENTICATING))
@@ -222,7 +221,6 @@ class Flickr
 
         if (!$ok)
         {
-            error_log('not ok');
             // We're authenticating afresh, clear out the session just in case there are remnants of a
             // previous authentication in there
             $this->signout();
@@ -233,8 +231,6 @@ class Flickr
                 // Make a note in the session of where we are first
                 $this->setOauthData(self::IS_AUTHENTICATING, true);
                 $this->setOauthData(self::PERMISSIONS, $permissions);
-
-                error_log('redirect');
 
                 header(sprintf('Location: %s?oauth_token=%s&perms=%s',
                     self::AUTH_ENDPOINT,
@@ -409,21 +405,17 @@ class Flickr
      */
     private function obtainRequestToken()
     {
-        error_log(__FUNCTION__);
         $params = $this->getOauthParams();
         $params['oauth_callback'] = $this->callback;
-        error_log('callback: ' . $this->callback);
 
         $this->sign(self::REQUEST_TOKEN_ENDPOINT, $params);
 
         $rsp = $this->httpRequest(self::REQUEST_TOKEN_ENDPOINT, $params);
-        error_log(print_r($rsp, true));
         $responseParameters = $this->splitParameters($rsp);
         $callbackOK = (@$responseParameters['oauth_callback_confirmed'] == 'true');
 
         if ($callbackOK)
         {
-            error_log('is ok!');
             $this->setOauthData(self::OAUTH_REQUEST_TOKEN, @$responseParameters['oauth_token']);
             $this->setOauthData(self::OAUTH_REQUEST_TOKEN_SECRET, @$responseParameters['oauth_token_secret']);
         }

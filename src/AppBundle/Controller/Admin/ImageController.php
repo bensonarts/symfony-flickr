@@ -45,18 +45,17 @@ class ImageController extends Controller
     public function createAction(Request $request, Category $category)
     {
         $image = new Image();
-        $form = $this->createForm(ImageType::class, $image);
+        $flickrManager = $this->get('flickr.manager');
+        $callback = $this->generateUrl('admin_image_create',
+            ['id' => $category->getId()], UrlGeneratorInterface::ABSOLUTE_URL);
+        $flickrManager->authenticate($callback);
 
+        $form = $this->createForm(ImageType::class, $image);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $image = $form->getData();
-
-            $flickrManager = $this->get('flickr.manager');
-            $callback = $this->generateUrl('admin_image_create',
-                ['id' => $category->getId()], UrlGeneratorInterface::ABSOLUTE_URL);
-
-            $flickrImageId = $flickrManager->upload($image->getUrl(), $image->getTitle(), $callback);
+            $flickrImageId = $flickrManager->upload($image->getUrl(), $image->getTitle());
             $flickrImageSizes = $flickrManager->getImageSizes($flickrImageId);
             // Get image sizes collection.
             foreach ($flickrImageSizes as $size) {
